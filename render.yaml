@@ -1,6 +1,13 @@
 # Render Blueprint for the client demo branch.
-# Deploys a single free web service: SQLite (committed with demo data) + media
-# served by Django. No Postgres/Redis required.
+# One free web service (0.5 CPU / 512 MB): SQLite (committed with demo data) +
+# media served by Django. No Postgres/Redis/Celery worker required.
+#
+# Memory/CPU notes for the free instance:
+#   - a single gthread worker (1 process, 4 threads) keeps RAM ~150-200 MB
+#   - --preload loads the app once before forking (copy-on-write friendly)
+#   - --max-requests recycles the worker to cap any slow leaks
+#   - MALLOC_ARENA_MAX=2 reduces glibc allocator fragmentation
+#   - Celery runs eagerly, so no separate worker process is started
 services:
   - type: web
     name: shopbazar-demo
@@ -13,7 +20,20 @@ services:
       pip install -r requirements.txt &&
       python manage.py collectstatic --noinput &&
       python manage.py migrate --noinput
-    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    startCommand: >-
+      gunicorn config.wsgi:application
+      --bind 0.0.0.0:$PORT
+      --worker-class gthread
+      --workers 1
+      --threads 4
+      --timeout 60
+      --graceful-timeout 30
+      --keep-alive 5
+      --max-requests 500
+      --max-requests-jitter 50
+      --preload
+      --access-logfile -
+      --log-file -
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.12
@@ -25,3 +45,12 @@ services:
         value: "False"
       - key: ALLOWED_HOSTS
         value: "*"
+      # Keep the process count at one; do not let a platform default raise it.
+      - key: WEB_CONCURRENCY
+        value: "1"
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: PYTHONDONTWRITEBYTECODE
+        value: "1"
+      - key: MALLOC_ARENA_MAX
+        value: "2"
