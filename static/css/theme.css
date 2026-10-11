@@ -1,0 +1,148 @@
+/* ==========================================================================
+   theme.css — single source of truth for all colors.
+   Never hardcode hex values in other CSS files or templates.
+   ========================================================================== */
+
+/* ─── LIGHT MODE (default) ─── */
+:root {
+  /* Primary — Deep Teal */
+  --color-primary:        #0E7373;
+  --color-primary-hover:  #0B5C5C;
+  --color-primary-deep:   #0B3B3B;
+  --color-primary-light:  #E6F4F4;
+  --color-primary-text:   #FFFFFF;
+
+  /* Accent — Saffron Amber (dark ink for AA contrast) */
+  --color-accent:         #D97706;
+  --color-accent-hover:   #B45309;
+  --color-accent-light:   #FEF3C7;
+  --color-accent-text:    #3A1D00;
+
+  /* Sale — Urgency Red */
+  --color-sale:           #B91C1C;
+  --color-sale-light:     #FEE2E2;
+  --color-sale-text:      #FFFFFF;
+
+  /* Surfaces */
+  --color-bg:             #F0F7F7;
+  --color-surface:        #FFFFFF;
+  --color-surface-alt:    #F7FBFB;
+
+  /* Borders */
+  --color-border:         #D1E8E8;
+  --color-border-strong:  #A8D4D4;
+
+  /* Text */
+  --color-text:           #0F2E2E;
+  --color-text-muted:     #4A7E7E;
+  --color-text-disabled:  #93BBBB;
+
+  /* Chrome */
+  --color-nav-bg:         #0E7373;
+  --color-nav-text:       #FFFFFF;
+  --color-footer-bg:      #0B3B3B;
+  --color-footer-text:    rgba(255,255,255,0.75);
+  --color-footer-heading: rgba(255,255,255,0.70);
+  --color-footer-accent:  #F5B94A;
+
+  /* Feedback */
+  --color-success:        #059669;
+  --color-success-light:  #D1FAE5;
+  --color-warning:        #D97706;
+  --color-error:          #DC2626;
+  --color-info:           #0E7373;
+
+  /* Shadows */
+  --shadow-card:     0 1px 3px rgba(14,115,115,0.08), 0 1px 2px rgba(14,115,115,0.04);
+  --shadow-elevated: 0 4px 12px rgba(14,115,115,0.12), 0 2px 4px rgba(14,115,115,0.06);
+
+  /* Radii */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-pill: 9999px;
+
+  /* Spacing */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Transitions */
+  --transition-fast: all 0.15s ease;
+  --transition-base: all 0.20s ease;
+
+  /* Bootstrap bridge (light) */
+  --bs-primary-rgb: 14, 115, 115;
+}
+
+/* ─── DARK MODE ─── */
+[data-theme="dark"] {
+  --color-primary:        #13B8B8;
+  --color-primary-hover:  #0E9A9A;
+  --color-primary-deep:   #0A1717;
+  --color-primary-light:  #162B2B;
+  --color-primary-text:   #0F1E1E;
+
+  --color-accent:         #F59E0B;
+  --color-accent-hover:   #D97706;
+  --color-accent-light:   #1A1200;
+  --color-accent-text:    #0F1E1E;
+
+  --color-sale:           #EF4444;
+  --color-sale-light:     #2D0A0A;
+  --color-sale-text:      #0F1E1E;
+
+  --color-bg:             #0F1E1E;
+  --color-surface:        #162B2B;
+  --color-surface-alt:    #1A3030;
+
+  --color-border:         #1E3636;
+  --color-border-strong:  #2A4A4A;
+
+  --color-text:           #E8F4F4;
+  --color-text-muted:     #7AADAD;
+  --color-text-disabled:  #3A6060;
+
+  --color-nav-bg:         #0A1717;
+  --color-nav-text:       #FFFFFF;
+  --color-footer-bg:      #050E0E;
+  --color-footer-text:    rgba(255,255,255,0.65);
+  --color-footer-heading: rgba(255,255,255,0.70);
+  --color-footer-accent:  #F5B94A;
+
+  --shadow-card:     0 1px 3px rgba(0,0,0,0.30), 0 1px 2px rgba(0,0,0,0.20);
+  --shadow-elevated: 0 4px 12px rgba(0,0,0,0.40), 0 2px 4px rgba(0,0,0,0.25);
+
+  --bs-primary-rgb: 19, 184, 184;
+}
+
+/* ─── Typography ─── */
+body {
+  font-family: 'Hind Siliguri', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 { font-size: 1.875rem; font-weight: 600; line-height: 1.25; }
+h2 { font-size: 1.5rem;   font-weight: 600; line-height: 1.30; }
+h3 { font-size: 1.25rem;  font-weight: 600; line-height: 1.35; }
+h4 { font-size: 1.0625rem;font-weight: 500; line-height: 1.40; }
+h5 { font-size: 0.9375rem;font-weight: 500; }
+h6 { font-size: 0.875rem; font-weight: 500; }
+
+.text-sm    { font-size: 0.8125rem; }
+.text-xs    { font-size: 0.75rem;   }
+.text-muted-c { color: var(--color-text-muted); }
+
+/* Theme toggle icon initial state (no flash) */
+[data-theme="light"] .icon-sun { display: none; }
+[data-theme="dark"]  .icon-moon { display: none; }

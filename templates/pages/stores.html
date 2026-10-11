@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}শোরুম — ShopBazar{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="section-title mb-4">আমাদের শোরুম</h1>
+  <div class="row g-4">
+    {% for store in stores %}
+      <div class="col-md-6">
+        <div class="card h-100"><div class="card-body">
+          <h5 class="section-title">{{ store.name }}
+            {% if store.is_head_office %}<span class="badge-preorder ms-2">প্রধান কার্যালয়</span>{% endif %}
+          </h5>
+          <p class="mb-1">{{ store.address }}</p>
+          {% if store.phone %}<p class="mb-2 text-sm"><i class="fa-solid fa-phone me-1"></i>{{ store.phone }}</p>{% endif %}
+          {% if store.map_embed_url %}
+            <div class="ratio ratio-16x9"><iframe src="{{ store.map_embed_url }}" loading="lazy" title="{{ store.name }}"></iframe></div>
+          {% endif %}
+        </div></div>
+      </div>
+    {% empty %}
+      <p class="text-muted-c">কোনো শোরুম নেই।</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+<footer class="site-footer mt-5 pt-5 pb-3">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="footer-heading">সাপোর্ট</div>
+        {% if support_info.phone_number %}
+          <div class="footer-support-phone fs-5">{{ support_info.phone_number }}</div>
+        {% endif %}
+        {% if support_info.support_hours %}
+          <div class="text-sm mt-1">{{ support_info.support_hours }}</div>
+        {% endif %}
+        {% if support_info.email %}
+          <div class="text-sm mt-1">{{ support_info.email }}</div>
+        {% endif %}
+      </div>
+
+      <div class="col-md-2">
+        <div class="footer-heading">লিংক</div>
+        <a class="footer-link" href="{% url 'pages:about' %}">আমাদের সম্পর্কে</a>
+        <a class="footer-link" href="{% url 'pages:privacy' %}">প্রাইভেসি পলিসি</a>
+        <a class="footer-link" href="{% url 'pages:terms' %}">শর্তাবলী</a>
+        <a class="footer-link" href="{% url 'pages:brands' %}">ব্র্যান্ড</a>
+      </div>
+
+      <div class="col-md-2">
+        <div class="footer-heading">শোরুম</div>
+        <a class="footer-link" href="{% url 'pages:stores' %}">সকল শোরুম</a>
+        <a class="footer-link" href="{% url 'pages:contact' %}">যোগাযোগ</a>
+      </div>
+
+      <div class="col-md-4">
+        <div class="footer-heading">প্রধান কার্যালয়</div>
+        {% if site_settings.head_office_address %}<div class="text-sm">{{ site_settings.head_office_address }}</div>{% endif %}
+        {% if site_settings.head_office_phone %}<div class="text-sm">{{ site_settings.head_office_phone }}</div>{% endif %}
+        {% if site_settings.head_office_email %}<div class="text-sm">{{ site_settings.head_office_email }}</div>{% endif %}
+        <div class="mt-2 d-flex gap-3 fs-5">
+          {% if site_settings.facebook_url %}<a href="{{ site_settings.facebook_url }}" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>{% endif %}
+          {% if site_settings.youtube_url %}<a href="{{ site_settings.youtube_url }}" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>{% endif %}
+          {% if site_settings.instagram_url %}<a href="{{ site_settings.instagram_url }}" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <hr class="mt-4" style="border-color:var(--color-footer-heading)">
+    <div class="text-center text-sm">© 2025 {{ site_settings.site_name|default:"ShopBazar" }}. সর্বস্বত্ব সংরক্ষিত।</div>
+  </div>
+</footer>

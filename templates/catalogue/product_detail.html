@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load currency %}
+{% block title %}{{ product.display_name }} — ShopBazar{% endblock %}
+{% block meta_description %}{{ product.meta_description|default:product.short_description }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row g-4">
+    {# ── GALLERY ── #}
+    <div class="col-md-5">
+      {% with primary=product.primary_image %}
+        {% if primary %}
+          <img id="main-image" src="{{ primary.image.url }}" class="img-fluid rounded w-100" alt="{{ primary.alt_text|default:product.display_name }}">
+        {% else %}
+          <div class="rounded d-flex align-items-center justify-content-center" style="background:var(--color-surface-alt);height:360px">
+            <i class="fa-solid fa-image fs-1 text-muted-c"></i>
+          </div>
+        {% endif %}
+      {% endwith %}
+      <div class="d-flex gap-2 mt-2 flex-wrap">
+        {% for img in product.images.all %}
+          <img src="{{ img.image.url }}" width="70" height="70" class="rounded border" role="button"
+               style="object-fit:cover;cursor:pointer;border-color:var(--color-border)!important"
+               onclick="document.getElementById('main-image').src='{{ img.image.url }}'"
+               alt="{{ img.alt_text|default:product.display_name }}">
+        {% endfor %}
+      </div>
+    </div>
+
+    {# ── INFO ── #}
+    <div class="col-md-7">
+      <h1 class="h3">{{ product.display_name }}</h1>
+      <div class="stars mb-2">{{ product.average_rating.average|stars }} <span class="text-muted-c text-sm">({{ product.average_rating.count }} রিভিউ)</span></div>
+
+      <div class="price-row mb-3">
+        <span class="product-price fs-3">{{ product.get_effective_price|bdt }}</span>
+        {% if product.discount_percent %}
+          <span class="product-price-old fs-6">{{ product.was_price|bdt }}</span>
+          <span class="badge-sale">{{ product.discount_percent }}% OFF</span>
+        {% endif %}
+      </div>
+
+      {% if product.availability == 'IN_STOCK' %}
+        <span class="badge-preorder">স্টকে আছে</span>
+      {% elif product.availability == 'PRE_ORDER' %}
+        <span class="badge-preorder">প্রি-অর্ডার</span>
+      {% else %}
+        <span class="badge-upcoming">আসছে</span>
+      {% endif %}
+
+      <p class="mt-3">{{ product.short_description }}</p>
+
+      <form class="row g-2 align-items-end mt-3"
+            hx-post="{% url 'cart:add' %}" hx-target="#cart-badge" hx-swap="outerHTML">
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+        {% if product.variants.exists %}
+          <div class="col-md-5">
+            <label class="form-label">ভ্যারিয়েন্ট</label>
+            <select name="variant_id" class="form-select">
+              {% for v in product.variants.all %}
+                <option value="{{ v.id }}">{{ v.name }} — {{ v.effective_price|bdt }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endif %}
+        <div class="col-md-3">
+          <label class="form-label">পরিমাণ</label>
+          <input type="number" name="quantity" value="1" min="1" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <button type="submit" class="btn btn-brand w-100" {% if not product.in_stock %}disabled{% endif %}>
+            <i class="fa-solid fa-cart-plus me-1"></i>কার্টে যোগ করুন
+          </button>
+        </div>
+      </form>
+
+      {% if product.full_description %}
+        <div class="mt-4">
+          <h5 class="section-title">বিবরণ</h5>
+          <div>{{ product.full_description|safe }}</div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {# ── REVIEWS ── #}
+  <section class="mt-5">
+    <h4 class="section-title">রিভিউ</h4>
+    <div class="row g-4">
+      <div class="col-md-7">
+        {% for review in reviews %}
+          <div class="border-bottom pb-2 mb-2" style="border-color:var(--color-border)!important">
+            <div class="d-flex justify-content-between">
+              <strong>{{ review.user.full_name|default:review.user.email }}</strong>
+              <span class="stars">{{ review.rating|stars }}</span>
+            </div>
+            <p class="mb-0 text-sm">{{ review.comment }}</p>
+          </div>
+        {% empty %}
+          <p class="text-muted-c">এখনো কোনো রিভিউ নেই।</p>
+        {% endfor %}
+      </div>
+      <div class="col-md-5">
+        <div class="card">
+          <div class="card-body">
+            <h6 class="section-title">একটি রিভিউ দিন</h6>
+            <form method="post" novalidate>
+              {% csrf_token %}
+              {% if review_form.non_field_errors %}
+                <div class="alert alert-danger py-2">{{ review_form.non_field_errors }}</div>
+              {% endif %}
+              <div class="row g-3">
+                {% include 'partials/field.html' with field=review_form.rating col='col-12' %}
+                {% include 'partials/field.html' with field=review_form.comment col='col-12' %}
+              </div>
+              <button class="btn btn-brand w-100 mt-3" type="submit">জমা দিন</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ── RELATED ── #}
+  {% if related %}
+    <section class="mt-5">
+      <h4 class="section-title">সম্পর্কিত পণ্য</h4>
+      <div class="row g-3">
+        {% for product in related %}
+          <div class="col-6 col-md-3">{% include 'partials/product_card.html' with product=product %}</div>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+</div>
+{% endblock %}

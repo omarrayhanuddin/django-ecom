@@ -1,0 +1,16 @@
+{% load currency %}
+<div class="{{ col|default:'col-md-6' }}">
+  {% if field.field.widget.input_type == 'checkbox' %}
+    <div class="form-check mt-md-4">
+      {{ field|add_class:"form-check-input" }}
+      <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+    </div>
+  {% else %}
+    <label class="form-label" for="{{ field.id_for_label }}">
+      {{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}
+    </label>
+    {% with cls=field|widget_class %}{{ field|add_class:cls }}{% endwith %}
+    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+  {% endif %}
+  {% for error in field.errors %}<div class="text-danger text-sm mt-1">{{ error }}</div>{% endfor %}
+</div>

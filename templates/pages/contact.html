@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load currency %}
+{% block title %}যোগাযোগ — ShopBazar{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="section-title mb-4">যোগাযোগ ও সাপোর্ট</h1>
+  <div class="row g-4">
+    <div class="col-lg-5">
+      <div class="card"><div class="card-body">
+        <h6 class="section-title">সাপোর্ট</h6>
+        {% if support_info.phone_number %}
+          <p class="fs-5 footer-support-phone mb-1"><i class="fa-solid fa-phone me-1"></i>{{ support_info.phone_number }}</p>
+        {% endif %}
+        {% if support_info.support_hours %}<p class="text-sm mb-1">{{ support_info.support_hours }}</p>{% endif %}
+        {% if support_info.email %}<p class="text-sm mb-0">{{ support_info.email }}</p>{% endif %}
+        <a href="{% url 'pages:stores' %}" class="btn btn-outline-brand mt-3">শোরুম দেখুন</a>
+      </div></div>
+    </div>
+    <div class="col-lg-7">
+      <div class="card"><div class="card-body">
+        <h6 class="section-title">বার্তা পাঠান</h6>
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3">
+            {% for field in form %}
+              {% include 'partials/field.html' with field=field col='col-12' %}
+            {% endfor %}
+          </div>
+          <button class="btn btn-brand w-100 mt-3" type="submit">পাঠান</button>
+        </form>
+      </div></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

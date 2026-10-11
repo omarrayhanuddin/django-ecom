@@ -1,0 +1,22 @@
+{% load currency %}
+<div class="p-3" style="background:var(--color-surface-alt)">
+  <div class="d-flex justify-content-between mb-1">
+    <span class="text-muted-c">সাব-টোটাল</span>
+    <span>{{ cart.subtotal|default:0|bdt }}</span>
+  </div>
+  {% if cart.discount_amount %}
+    <div class="d-flex justify-content-between mb-1">
+      <span class="text-muted-c">ছাড় {% if cart.coupon %}({{ cart.coupon.code }}){% endif %}</span>
+      <span class="text-danger">−{{ cart.discount_amount|bdt }}</span>
+    </div>
+  {% endif %}
+  <div class="d-flex justify-content-between mb-1">
+    <span class="text-muted-c">সার্ভিস ফি ({{ cart.platform_fee_percentage|default:0 }}%)</span>
+    <span>{{ cart.platform_fee_amount|default:0|bdt }}</span>
+  </div>
+  <hr style="border-color:var(--color-border)">
+  <div class="d-flex justify-content-between fw-700 fs-5">
+    <span>মোট</span>
+    <span class="product-price">{{ cart.total|default:0|bdt }}</span>
+  </div>
+</div>

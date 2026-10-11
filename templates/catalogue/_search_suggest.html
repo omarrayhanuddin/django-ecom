@@ -1,0 +1,16 @@
+{% load currency %}
+{% if products %}
+  <ul class="list-unstyled mb-0">
+    {% for product in products %}
+      <li class="border-bottom" style="border-color:var(--color-border)!important">
+        <a href="{{ product.get_absolute_url }}" class="d-flex align-items-center gap-2 p-2 text-decoration-none text-reset">
+          {% if product.primary_image %}
+            <img src="{{ product.primary_image.image.url }}" width="40" height="40" class="rounded" style="object-fit:cover" alt="">
+          {% endif %}
+          <span class="flex-grow-1 text-sm">{{ product.display_name }}</span>
+          <span class="product-price text-sm">{{ product.get_effective_price|bdt }}</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

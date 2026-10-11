@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load currency %}
+{% block title %}অর্ডার {{ order.order_number }} — ShopBazar{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="section-title">অর্ডার {{ order.order_number }}</h1>
+    <span class="badge-preorder">{{ order.get_status_display }}</span>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="card"><div class="card-body">
+        <h6 class="section-title">পণ্য</h6>
+        {% include 'partials/order_summary.html' %}
+      </div></div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card"><div class="card-body">
+        <h6 class="section-title">স্ট্যাটাস</h6>
+        <p class="mb-1 text-sm"><span class="text-muted-c">অর্ডার:</span> {{ order.get_status_display }}</p>
+        <p class="mb-1 text-sm"><span class="text-muted-c">পেমেন্ট:</span> {{ order.get_payment_status_display }}</p>
+        {% if order.note %}<p class="text-sm"><span class="text-muted-c">মন্তব্য:</span> {{ order.note }}</p>{% endif %}
+      </div></div>
+      <div class="card mt-3"><div class="card-body">
+        <h6 class="section-title">গ্রাহক</h6>
+        <p class="mb-1 text-sm">{% firstof order.customer_name order.user.full_name order.guest_email %}</p>
+        <p class="mb-1 text-sm">{{ order.contact_email }}</p>
+        <p class="mb-0 text-sm">{{ order.contact_phone }}</p>
+      </div></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

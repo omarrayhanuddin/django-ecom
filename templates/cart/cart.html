@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}কার্ট — ShopBazar{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="section-title mb-4">আপনার কার্ট</h1>
+  <div class="row">
+    <div class="col-lg-8">
+      {% include 'partials/cart_panel.html' %}
+    </div>
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="section-title">শোরুম থেকে সংগ্রহ</h6>
+          <p class="text-sm text-muted-c mb-0">
+            আমরা ডেলিভারি দিই না। অর্ডার নিশ্চিত হলে নির্দিষ্ট শোরুম থেকে পণ্য সংগ্রহ করতে হবে।
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

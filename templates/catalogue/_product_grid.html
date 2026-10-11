@@ -1,0 +1,37 @@
+{% load currency %}
+<div id="product-grid">
+  {% if products %}
+    <div class="row g-3">
+      {% for product in products %}
+        <div class="col-6 col-md-4 col-lg-3">{% include 'partials/product_card.html' with product=product %}</div>
+      {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+      <nav class="mt-4" aria-label="পেজিনেশন">
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?{% querystring page=page_obj.previous_page_number %}"
+                 hx-get="?{% querystring page=page_obj.previous_page_number %}"
+                 hx-target="#product-grid" hx-push-url="true">পূর্ববর্তী</a>
+            </li>
+          {% endif %}
+          <li class="page-item disabled"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?{% querystring page=page_obj.next_page_number %}"
+                 hx-get="?{% querystring page=page_obj.next_page_number %}"
+                 hx-target="#product-grid" hx-push-url="true">পরবর্তী</a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+  {% else %}
+    <div class="text-center py-5">
+      <i class="fa-solid fa-box-open fs-1 text-muted-c"></i>
+      <p class="mt-3 text-muted-c">কোনো পণ্য পাওয়া যায়নি।</p>
+    </div>
+  {% endif %}
+</div>

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}ফ্ল্যাশ সেল — ShopBazar{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="section-title mb-3">⚡ ফ্ল্যাশ সেল</h1>
+  {% if sale %}
+    <div class="flash-sale-bar mb-4" x-data="countdown({{ sale.time_remaining_seconds }})" x-init="start()">
+      <span>{{ sale.name }} — শেষ হবে</span>
+      <span class="flash-sale-timer" x-text="text">--:--:--</span>
+    </div>
+    <div class="row g-3">
+      {% for entry in entries %}
+        <div class="col-6 col-md-4 col-lg-3">{% include 'partials/product_card.html' with product=entry.product %}</div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-muted-c">এই মুহূর্তে কোনো চলমান ফ্ল্যাশ সেল নেই।</p>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function countdown(seconds) {
+    return {
+      text: '--:--:--',
+      start() {
+        let s = seconds;
+        const tick = () => {
+          if (s <= 0) { this.text = 'শেষ'; return; }
+          const h = String(Math.floor(s / 3600)).padStart(2, '0');
+          const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+          const sec = String(s % 60).padStart(2, '0');
+          this.text = `${h}:${m}:${sec}`;
+          s -= 1;
+          setTimeout(tick, 1000);
+        };
+        tick();
+      }
+    };
+  }
+</script>
+{% endblock %}

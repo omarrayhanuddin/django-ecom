@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load currency %}
+{% block title %}ঠিকানা — ShopBazar{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="section-title mb-4">আমার ঠিকানা</h1>
+  <div class="row g-4">
+    <div class="col-lg-7">
+      {% for address in addresses %}
+        <div class="card mb-3"><div class="card-body d-flex justify-content-between">
+          <div>
+            <strong>{{ address.get_label_display }}</strong>
+            {% if address.is_default %}<span class="badge-preorder ms-2">ডিফল্ট</span>{% endif %}
+            <div class="text-sm">{{ address.street_address }}, {{ address.district }}, {{ address.division }}</div>
+          </div>
+          <a href="{% url 'accounts:address_delete' address.pk %}" class="btn btn-sm btn-outline-brand">মুছুন</a>
+        </div></div>
+      {% empty %}
+        <p class="text-muted-c">কোনো ঠিকানা নেই।</p>
+      {% endfor %}
+    </div>
+    <div class="col-lg-5">
+      <div class="card"><div class="card-body">
+        <h6 class="section-title">নতুন ঠিকানা</h6>
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3">
+            {% for field in form %}
+              {% include 'partials/field.html' with field=field col='col-12' %}
+            {% endfor %}
+          </div>
+          <button class="btn btn-brand w-100 mt-3" type="submit">যোগ করুন</button>
+        </form>
+      </div></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

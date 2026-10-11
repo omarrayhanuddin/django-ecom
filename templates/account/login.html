@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load currency socialaccount %}
+{% block title %}লগইন — ShopBazar{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="card"><div class="card-body">
+        <h1 class="section-title mb-4">লগইন</h1>
+
+        {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+
+        <form method="post" action="{% url 'account_login' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label">ইমেইল</label>
+            {{ form.login|add_class:"form-control" }}
+          </div>
+          <div class="mb-3">
+            <label class="form-label">পাসওয়ার্ড</label>
+            {{ form.password|add_class:"form-control" }}
+          </div>
+          {{ form.remember }}
+          <label class="form-check-label mb-3">মনে রাখুন</label>
+          {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+          {% endif %}
+          <button type="submit" class="btn btn-brand w-100">লগইন</button>
+        </form>
+
+        <div class="text-center my-3 text-muted-c">অথবা</div>
+        {% include 'partials/social_login.html' %}
+
+        <p class="text-center mt-3 text-sm">
+          নতুন? <a href="{% url 'accounts:register' %}">রেজিস্টার করুন</a>
+        </p>
+      </div></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

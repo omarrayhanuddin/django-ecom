@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}{% if category %}{{ category.display_name }}{% else %}সকল পণ্য{% endif %} — ShopBazar{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="section-title mb-4">
+    {% if category %}{{ category.display_name }}{% elif search_term %}অনুসন্ধান: "{{ search_term }}"{% else %}সকল পণ্য{% endif %}
+  </h1>
+
+  <div class="row">
+    {# ── FILTER SIDEBAR ── #}
+    <aside class="col-lg-3 mb-4">
+      <form
+        hx-get="{% url 'catalogue:product_list' %}"
+        hx-target="#product-grid"
+        hx-swap="outerHTML"
+        hx-trigger="change, submit"
+        hx-push-url="true"
+        method="get"
+        action="{% url 'catalogue:product_list' %}">
+        <input type="hidden" name="q" value="{{ search_term|default:'' }}">
+
+        <div class="card mb-3">
+          <div class="card-body">
+            <h6 class="section-title">ক্যাটাগরি</h6>
+            <select name="category" class="form-select">
+              <option value="">সব</option>
+              {% for cat in categories %}
+                <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:'s' %}selected{% endif %}>{{ cat.display_name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-body">
+            <h6 class="section-title">দাম (৳)</h6>
+            <div class="d-flex gap-2">
+              <input type="number" name="min_price" class="form-control" placeholder="সর্বনিম্ন" value="{{ request.GET.min_price }}">
+              <input type="number" name="max_price" class="form-control" placeholder="সর্বোচ্চ" value="{{ request.GET.max_price }}">
+            </div>
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-body">
+            <h6 class="section-title">স্টক</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="in_stock" value="on" id="f-instock" {% if request.GET.in_stock %}checked{% endif %}>
+              <label class="form-check-label" for="f-instock">শুধু স্টকে আছে</label>
+            </div>
+            {% for value, label in availability_choices %}
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="availability" value="{{ value }}" id="f-av-{{ value }}" {% if value in selected_availability %}checked{% endif %}>
+                <label class="form-check-label" for="f-av-{{ value }}">{{ label }}</label>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-body">
+            <h6 class="section-title">ধরন</h6>
+            {% for value, label in product_type_choices %}
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="product_type" value="{{ value }}" id="f-pt-{{ value }}" {% if value in selected_product_types %}checked{% endif %}>
+                <label class="form-check-label" for="f-pt-{{ value }}">{{ label }}</label>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-body">
+            <h6 class="section-title">সাজান</h6>
+            <select name="ordering" class="form-select">
+              <option value="">ডিফল্ট</option>
+              <option value="price" {% if request.GET.ordering == 'price' %}selected{% endif %}>দাম ↑</option>
+              <option value="-price" {% if request.GET.ordering == '-price' %}selected{% endif %}>দাম ↓</option>
+              <option value="-newest" {% if request.GET.ordering == '-newest' %}selected{% endif %}>নতুন</option>
+              <option value="-rating" {% if request.GET.ordering == '-rating' %}selected{% endif %}>রেটিং</option>
+              <option value="-popular" {% if request.GET.ordering == '-popular' %}selected{% endif %}>জনপ্রিয়</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-brand w-100">ফিল্টার প্রয়োগ</button>
+      </form>
+    </aside>
+
+    {# ── GRID ── #}
+    <div class="col-lg-9">
+      {% include 'catalogue/_product_grid.html' %}
+    </div>
+  </div>
+</div>
+{% endblock %}

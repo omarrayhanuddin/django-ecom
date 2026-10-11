@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load currency %}
+{% block title %}অর্ডার {{ order.order_number }} — ShopBazar{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="text-center mb-4">
+    <i class="fa-solid fa-circle-check text-success fs-1"></i>
+    <h1 class="h3 mt-2">অর্ডার সফলভাবে জমা হয়েছে!</h1>
+    <p class="text-muted-c">আপনার অর্ডার নম্বর <strong>{{ order.order_number }}</strong></p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="section-title">অর্ডার সারসংক্ষেপ</h6>
+          {% include 'partials/order_summary.html' %}
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="alert alert-info">
+        <h6 class="mb-2">পরবর্তী ধাপ</h6>
+        <p class="text-sm mb-1">আপনার পেমেন্ট রেফারেন্স যাচাই করা হচ্ছে। যাচাই সম্পন্ন হলে ইমেইলে জানানো হবে।</p>
+        <p class="text-sm mb-0">লিঙ্ক সংরক্ষণ করুন:
+          <a href="{% url 'orders:track' order.public_token %}">অর্ডার ট্র্যাক করুন</a>
+        </p>
+      </div>
+      <div class="alert alert-success">
+        <i class="fa-solid fa-gift me-1"></i>
+        পেমেন্ট যাচাই হলে আপনি একটি <strong>৫% নেক্সট-পারচেজ কুপন</strong> পাবেন।
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

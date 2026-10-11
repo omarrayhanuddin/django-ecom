@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}লগআউট — ShopBazar{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="card"><div class="card-body text-center">
+        <h1 class="section-title mb-3">লগআউট করবেন?</h1>
+        <form method="post" action="{% url 'account_logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-brand">হ্যাঁ, লগআউট</button>
+          <a href="{% url 'pages:home' %}" class="btn btn-outline-brand">বাতিল</a>
+        </form>
+      </div></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

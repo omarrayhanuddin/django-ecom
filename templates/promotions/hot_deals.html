@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}হট ডিল — ShopBazar{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="section-title mb-4">🔥 হট ডিল</h1>
+  <div class="row g-3">
+    {% for hot in hot_sales %}
+      <div class="col-6 col-md-4 col-lg-3">{% include 'partials/product_card.html' with product=hot.product %}</div>
+    {% empty %}
+      <p class="text-muted-c">এই মুহূর্তে কোনো হট ডিল নেই।</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

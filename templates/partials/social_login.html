@@ -1,0 +1,31 @@
+{% load socialaccount %}
+{% comment %}
+Social sign-in buttons. Google/Facebook use real allauth URLs when a SocialApp
+is configured; otherwise they are placeholders (visible now, wired up later).
+Apple is always a placeholder.
+{% endcomment %}
+<div class="d-grid gap-2">
+  {% if 'google' in social_provider_ids %}
+    <a href="{% provider_login_url 'google' %}" class="btn-social">
+      <i class="fa-brands fa-google"></i>Google দিয়ে চালিয়ে যান
+    </a>
+  {% else %}
+    <a href="#" class="btn-social" onclick="return false" aria-disabled="true" title="শীঘ্রই আসছে">
+      <i class="fa-brands fa-google"></i>Google দিয়ে চালিয়ে যান
+    </a>
+  {% endif %}
+
+  {% if 'facebook' in social_provider_ids %}
+    <a href="{% provider_login_url 'facebook' %}" class="btn-social">
+      <i class="fa-brands fa-facebook"></i>Facebook দিয়ে চালিয়ে যান
+    </a>
+  {% else %}
+    <a href="#" class="btn-social" onclick="return false" aria-disabled="true" title="শীঘ্রই আসছে">
+      <i class="fa-brands fa-facebook"></i>Facebook দিয়ে চালিয়ে যান
+    </a>
+  {% endif %}
+
+  <a href="#" class="btn-social" onclick="return false" aria-disabled="true" title="শীঘ্রই আসছে">
+    <i class="fa-brands fa-apple"></i>Apple দিয়ে চালিয়ে যান
+  </a>
+</div>

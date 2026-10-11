@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load currency %}
+{% block title %}সম্পূর্ণ করুন — ShopBazar{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div class="card">
+        <div class="card-body">
+          <h1 class="section-title mb-3">আপনার তথ্য সম্পূর্ণ করুন</h1>
+          <p class="text-muted-c">স্বাগতম! অনুগ্রহ করে আপনার মোবাইল নম্বর ও একটি ঠিকানা যোগ করুন।</p>
+          <form method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}<div class="alert alert-danger py-2">{{ form.non_field_errors }}</div>{% endif %}
+            <div class="row g-3">
+              {% for field in form %}
+                {% include 'partials/field.html' with field=field %}
+              {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-brand w-100 mt-4">সংরক্ষণ করুন</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

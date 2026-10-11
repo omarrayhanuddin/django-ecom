@@ -1,0 +1,46 @@
+/* ==========================================================================
+   overrides.css — map Bootstrap variables onto the theme tokens.
+   Loaded AFTER Bootstrap. Note: --bs-primary is NOT used by Bootstrap's own
+   .btn-primary (that is compiled from Sass), so brand buttons use the
+   .btn-primary rules in components.css.
+   ========================================================================== */
+:root {
+  --bs-primary:          var(--color-primary);
+  --bs-link-color:       var(--color-primary);
+  --bs-link-hover-color: var(--color-primary-hover);
+  --bs-body-bg:          var(--color-bg);
+  --bs-body-color:       var(--color-text);
+  --bs-border-color:     var(--color-border);
+  --bs-card-bg:          var(--color-surface);
+  --bs-secondary-color:  var(--color-text-muted);
+}
+
+body { background-color: var(--color-bg); color: var(--color-text); }
+
+.card {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.form-control, .form-select {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.table { --bs-table-bg: transparent; color: var(--color-text); }
+
+.dropdown-menu {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+}
+.dropdown-item { color: var(--color-text); }
+.dropdown-item:hover { background-color: var(--color-primary-light); color: var(--color-primary); }
+
+.alert-info { background-color: var(--color-primary-light); border-color: var(--color-border-strong); color: var(--color-text); }
+.alert-success { background-color: var(--color-success-light); color: var(--color-text); }

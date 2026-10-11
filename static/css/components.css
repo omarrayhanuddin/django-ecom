@@ -1,0 +1,267 @@
+/* ==========================================================================
+   components.css — component styles built on theme.css tokens.
+   ========================================================================== */
+@import url("theme.css");
+
+/* ─── Buttons ─── */
+.btn-brand {
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 9px 18px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+.btn-brand:hover { background: var(--color-primary-hover); color: var(--color-primary-text); }
+
+.btn-accent-brand {
+  background: var(--color-accent);
+  color: var(--color-accent-text);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 9px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+.btn-accent-brand:hover { background: var(--color-accent-hover); color: var(--color-accent-text); }
+
+.btn-outline-brand {
+  background: transparent;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  padding: 8px 18px;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+.btn-outline-brand:hover { background: var(--color-primary-light); color: var(--color-primary); }
+
+/* Neutralise Bootstrap primary buttons onto brand palette */
+.btn-primary {
+  --bs-btn-bg: var(--color-primary);
+  --bs-btn-border-color: var(--color-primary);
+  --bs-btn-hover-bg: var(--color-primary-hover);
+  --bs-btn-hover-border-color: var(--color-primary-hover);
+  --bs-btn-active-bg: var(--color-primary-hover);
+  --bs-btn-active-border-color: var(--color-primary-hover);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-primary-text);
+}
+.btn-primary:hover, .btn-primary:focus {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  color: var(--color-primary-text);
+}
+
+/* ─── Product cards ─── */
+.product-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: var(--transition-base);
+  height: 100%;
+}
+.product-card:hover {
+  box-shadow: var(--shadow-elevated);
+  border-color: var(--color-border-strong);
+  transform: translateY(-2px);
+}
+.product-card .product-thumb {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  width: 100%;
+  background: var(--color-surface-alt);
+}
+.product-card .product-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.6em;
+}
+.badge-sale {
+  background: var(--color-sale);
+  color: var(--color-sale-text);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+}
+.badge-hot { background: var(--color-accent); color: var(--color-accent-text); font-size: 0.7rem; font-weight: 700; padding: 2px 7px; border-radius: var(--radius-sm); }
+.badge-preorder { background: var(--color-primary-light); color: var(--color-primary); font-size: 0.7rem; padding: 2px 7px; border-radius: var(--radius-sm); }
+.badge-upcoming { background: var(--color-surface-alt); color: var(--color-text-muted); border: 1px solid var(--color-border); font-size: 0.7rem; padding: 2px 7px; border-radius: var(--radius-sm); }
+
+.product-price { color: var(--color-primary); font-weight: 700; font-size: 1rem; }
+.product-price-old { color: var(--color-text-muted); text-decoration: line-through; font-size: 0.8rem; }
+
+/* ─── Navigation ─── */
+.navbar-brandbar { background: var(--color-nav-bg); color: var(--color-nav-text); }
+.navbar-brandbar a:not(.dropdown-item) { color: var(--color-nav-text); text-decoration: none; opacity: 0.92; }
+.navbar-brandbar a:not(.dropdown-item):hover { opacity: 1; }
+/* Dropdown items must NOT inherit the white nav link colour (invisible on light) */
+.navbar-brandbar .dropdown-menu a.dropdown-item { color: var(--color-text); opacity: 1; }
+.navbar-brandbar .dropdown-menu a.dropdown-item:hover,
+.navbar-brandbar .dropdown-menu a.dropdown-item:focus {
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+.nav-cart-badge {
+  background: var(--color-accent);
+  color: var(--color-accent-text);
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: var(--radius-pill);
+  min-width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+/* ─── Flash sale bar ─── */
+.flash-sale-bar {
+  background: var(--color-accent);
+  color: var(--color-accent-text);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: var(--radius-md);
+}
+.flash-sale-timer {
+  background: rgba(255,255,255,0.9);
+  color: #7C2D00;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: var(--radius-sm);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .5px;
+}
+
+/* ─── Section headings ─── */
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4); }
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text);
+  padding-left: 10px;
+  border-left: 3px solid var(--color-primary);
+}
+.section-link { font-size: 0.8125rem; color: var(--color-primary); font-weight: 500; text-decoration: none; }
+
+/* ─── Footer ─── */
+.site-footer { background: var(--color-footer-bg); color: var(--color-footer-text); }
+.site-footer a { color: var(--color-footer-text); text-decoration: none; }
+.site-footer a:hover { color: #fff; }
+.footer-heading {
+  color: var(--color-footer-heading);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+.footer-link { color: var(--color-footer-text); font-size: 0.875rem; display: block; margin-bottom: var(--space-1); text-decoration: none; }
+.footer-link:hover { color: #fff; }
+.footer-support-phone { color: var(--color-footer-accent); font-weight: 600; }
+
+/* ─── Visitor counter ─── */
+.visitor-bar {
+  background: var(--color-primary-light);
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-2) var(--space-4);
+  display: flex;
+  gap: var(--space-6);
+  font-size: 0.8125rem;
+  flex-wrap: wrap;
+}
+.live-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  background: #22C55E; box-shadow: 0 0 0 3px rgba(34,197,94,0.2);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(34,197,94,0.2); }
+  50%       { box-shadow: 0 0 0 5px rgba(34,197,94,0.1); }
+}
+.visitor-label { color: var(--color-text-muted); }
+.visitor-count { color: var(--color-primary); font-weight: 600; margin-left: 4px; }
+
+/* ─── Category chips ─── */
+.category-chip {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  text-align: center;
+  display: block;
+  text-decoration: none;
+  color: var(--color-text);
+  transition: var(--transition-fast);
+}
+.category-chip:hover { border-color: var(--color-primary); color: var(--color-primary); box-shadow: var(--shadow-card); }
+.category-chip .cat-icon { font-size: 1.6rem; color: var(--color-primary); display: block; margin-bottom: var(--space-2); }
+
+/* ─── Cart drawer ─── */
+.cart-drawer {
+  position: fixed; top: 0; right: 0; height: 100%; width: 380px; max-width: 92vw;
+  background: var(--color-surface); box-shadow: var(--shadow-elevated);
+  z-index: 1050; overflow-y: auto;
+}
+.cart-drawer-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1040; }
+
+/* ─── Announcement marquee ─── */
+.announcement-bar { background: var(--color-primary-deep); color: #fff; overflow: hidden; white-space: nowrap; }
+.announcement-bar span { display: inline-block; padding-left: 100%; animation: marquee 22s linear infinite; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+
+/* ─── Hero carousel ─── */
+/* Fixed aspect ratio so banners never blow up, whatever the source image size */
+.hero-slide img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 8 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+}
+@media (max-width: 576px) {
+  .hero-slide img { aspect-ratio: 16 / 9; }
+}
+
+/* ─── Social login buttons (placeholder until OAuth is configured) ─── */
+.btn-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text);
+  border-radius: var(--radius-md);
+  padding: 9px 16px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+.btn-social:hover { border-color: var(--color-primary); color: var(--color-primary); background: var(--color-primary-light); }
+.btn-social .fa-google { color: #DB4437; }
+.btn-social .fa-facebook { color: #1877F2; }
+.btn-social .fa-apple { color: var(--color-text); }
+.stars { color: var(--color-accent); }
+.price-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+
+[x-cloak] { display: none !important; }
+.admin-thumb { height: 40px; }
+

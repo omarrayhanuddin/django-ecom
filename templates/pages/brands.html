@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}ব্র্যান্ড — ShopBazar{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="section-title mb-4">ব্র্যান্ড</h1>
+  <div class="row g-3">
+    {% for brand in brands %}
+      <div class="col-6 col-md-3">
+        <div class="category-chip">
+          {% if brand.logo %}
+            <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="img-fluid mb-2" style="max-height:60px">
+          {% else %}
+            <i class="fa-solid fa-tags cat-icon"></i>
+          {% endif %}
+          <div>{{ brand.name }}</div>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-muted-c">কোনো ব্র্যান্ড নেই।</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

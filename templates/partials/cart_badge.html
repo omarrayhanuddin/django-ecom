@@ -1,0 +1,10 @@
+{% comment %}
+Cart badge. Presentational only — it is updated either by the OOB copy in
+partials/cart_response.html or on a fresh page render. It must NOT self-refresh,
+otherwise an HTMX swap from another element races with it (htmx:swapError).
+
+Pass oob=True when including it inside an out-of-band response.
+{% endcomment %}
+<span id="cart-badge"
+      class="nav-cart-badge position-absolute top-0 start-100 translate-middle"
+      {% if oob %}hx-swap-oob="true"{% endif %}>{{ cart_item_count|default:0 }}</span>

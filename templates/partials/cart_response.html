@@ -1,0 +1,9 @@
+{% comment %}
+HTMX cart mutation response: an out-of-band badge update plus the refreshed
+cart panel. Returned by cart add / item / coupon endpoints.
+
+The caller targets `#cart-drawer-body` (innerHTML) or `closest .cart-panel`
+(outerHTML); htmx extracts the OOB badge and swaps the panel into place.
+{% endcomment %}
+{% include 'partials/cart_badge.html' with oob=True cart_item_count=cart.item_count %}
+{% include 'partials/cart_panel.html' %}

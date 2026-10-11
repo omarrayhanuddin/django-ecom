@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load currency %}
+{% block title %}প্রোফাইল — ShopBazar{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="section-title mb-4">আমার প্রোফাইল</h1>
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <div class="card"><div class="card-body">
+        <h6 class="section-title">তথ্য সম্পাদনা</h6>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row g-3">
+            {% for field in profile_form %}
+              {% include 'partials/field.html' with field=field col='col-12' %}
+            {% endfor %}
+            {% for field in avatar_form %}
+              {% include 'partials/field.html' with field=field col='col-12' %}
+            {% endfor %}
+          </div>
+          <button class="btn btn-brand mt-3" type="submit">সংরক্ষণ</button>
+        </form>
+      </div></div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card"><div class="card-body">
+        <h6 class="section-title">সাম্প্রতিক অর্ডার</h6>
+        {% if orders %}
+          <ul class="list-unstyled mb-0">
+            {% for order in orders %}
+              <li class="d-flex justify-content-between border-bottom py-2" style="border-color:var(--color-border)!important">
+                <a href="{% url 'orders:detail' order.order_number %}" class="section-link">{{ order.order_number }}</a>
+                <span class="text-sm">{{ order.total_amount|bdt }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted-c mb-0">কোনো অর্ডার নেই।</p>
+        {% endif %}
+        <a href="{% url 'accounts:addresses' %}" class="btn btn-outline-brand mt-3">ঠিকানা ব্যবস্থাপনা</a>
+      </div></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

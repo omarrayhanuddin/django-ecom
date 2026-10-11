@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load currency %}
+{% block title %}চেকআউট — ShopBazar{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="section-title mb-4">চেকআউট</h1>
+
+  <div class="alert alert-info d-flex align-items-start gap-2">
+    <i class="fa-solid fa-store mt-1"></i>
+    <span>
+      <strong>আপনাকে আমাদের শোরুম থেকে পণ্য সংগ্রহ করতে হবে।</strong>
+      আমরা কোনো ডেলিভারি সেবা দিই না।
+    </span>
+  </div>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="row g-4">
+      {# ── LEFT: form ── #}
+      <div class="col-lg-7">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="section-title mb-3">গ্রাহকের তথ্য</h5>
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger py-2">{{ form.non_field_errors }}</div>
+            {% endif %}
+            <div class="row g-3">
+              {% include 'partials/field.html' with field=form.customer_name col='col-md-6' %}
+              {% include 'partials/field.html' with field=form.phone col='col-md-6' %}
+              {% include 'partials/field.html' with field=form.email col='col-12' %}
+            </div>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="section-title mb-3">সংগ্রহ ও পেমেন্ট</h5>
+            <div class="row g-3">
+              {% include 'partials/field.html' with field=form.pickup_store col='col-12' %}
+              {% include 'partials/field.html' with field=form.payment_method col='col-md-6' %}
+              {% include 'partials/field.html' with field=form.payment_reference col='col-md-6' %}
+            </div>
+
+            <div class="mt-3">
+              <h6 class="text-sm text-muted-c mb-2">পেমেন্ট নির্দেশনা</h6>
+              <div class="list-group">
+                {% for inst in instructions %}
+                  <div class="list-group-item" style="background:var(--color-surface-alt);border-color:var(--color-border)">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <strong>{{ inst.method_name }}</strong>
+                      <span class="badge-preorder">{{ inst.account_number }}</span>
+                    </div>
+                    {% if inst.account_name %}<div class="text-sm text-muted-c">{{ inst.account_name }}</div>{% endif %}
+                    {% if inst.instructions %}<div class="text-sm">{{ inst.instructions }}</div>{% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="row g-3 mt-1">
+              {% include 'partials/field.html' with field=form.note col='col-12' %}
+            </div>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-body">
+            {% include 'partials/field.html' with field=form.agree col='col-12' %}
+          </div>
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-brand btn-lg">
+            <i class="fa-solid fa-clipboard-check me-1"></i>অর্ডার নিশ্চিত করুন
+          </button>
+        </div>
+      </div>
+
+      {# ── RIGHT: summary ── #}
+      <div class="col-lg-5">
+        <div class="card position-sticky" style="top:1rem">
+          <div class="card-body">
+            <h5 class="section-title mb-3">অর্ডার সারসংক্ষেপ</h5>
+            {% if cart.items.all %}
+              {% for item in cart.items.all %}
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <span class="text-sm">{{ item.product.display_name }} × {{ item.quantity }}</span>
+                  <span class="text-sm">{{ item.line_total|bdt }}</span>
+                </div>
+              {% endfor %}
+              <hr style="border-color:var(--color-border)">
+            {% endif %}
+            {% include 'partials/cart_summary.html' %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

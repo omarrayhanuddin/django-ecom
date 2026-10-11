@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load currency %}
+{% block title %}আমার অর্ডার — ShopBazar{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="section-title mb-4">আমার অর্ডার</h1>
+
+  {% if orders %}
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr><th>অর্ডার</th><th>তারিখ</th><th>অবস্থা</th><th>পেমেন্ট</th><th class="text-end">মোট</th><th></th></tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+            <tr>
+              <td>{{ order.order_number }}</td>
+              <td class="text-sm">{{ order.created_at|date:"d M Y" }}</td>
+              <td><span class="badge-preorder">{{ order.get_status_display }}</span></td>
+              <td><span class="badge-upcoming">{{ order.get_payment_status_display }}</span></td>
+              <td class="text-end">{{ order.total_amount|bdt }}</td>
+              <td class="text-end"><a href="{% url 'orders:detail' order.order_number %}" class="section-link">বিস্তারিত</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% if is_paginated %}
+      <nav><ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">পূর্ববর্তী</a></li>{% endif %}
+        <li class="page-item disabled"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">পরবর্তী</a></li>{% endif %}
+      </ul></nav>
+    {% endif %}
+  {% else %}
+    <p class="text-muted-c">আপনার কোনো অর্ডার নেই।</p>
+  {% endif %}
+</div>
+{% endblock %}

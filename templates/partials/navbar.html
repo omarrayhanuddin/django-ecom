@@ -1,0 +1,65 @@
+{% load static %}
+<header class="navbar-brandbar">
+  <div class="container">
+    <div class="d-flex align-items-center gap-3 py-2 flex-wrap">
+
+      <a href="{% url 'pages:home' %}" class="d-flex align-items-center gap-2 fs-5 fw-bold">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span>{{ site_settings.site_name|default:"ShopBazar" }}</span>
+      </a>
+
+      <form class="flex-grow-1 position-relative" method="get" action="{% url 'catalogue:search' %}" role="search">
+        <div class="input-group">
+          <input type="search" name="q" class="form-control" placeholder="পণ্য খুঁজুন..."
+                 hx-get="{% url 'catalogue:search_suggest' %}"
+                 hx-trigger="keyup changed delay:300ms"
+                 hx-target="#search-suggest"
+                 hx-swap="innerHTML"
+                 autocomplete="off">
+          <button class="btn btn-accent-brand" type="submit" aria-label="খুঁজুন">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+        <div id="search-suggest" class="position-absolute w-100 bg-white shadow-sm rounded" style="z-index:1080"></div>
+      </form>
+
+      <div class="d-flex align-items-center gap-3 ms-auto">
+        <button id="theme-toggle" class="btn btn-link text-white p-0" aria-label="Toggle dark mode" onclick="toggleTheme()">
+          <span class="icon-sun">☀️</span><span class="icon-moon">🌙</span>
+        </button>
+
+        <div x-data>
+          <button class="btn btn-link text-white p-0 position-relative"
+                  aria-label="কার্ট" @click="$dispatch('opencart')">
+            <i class="fa-solid fa-cart-shopping fs-5"></i>
+            {% include 'partials/cart_badge.html' %}
+          </button>
+        </div>
+
+        {% if user.is_authenticated %}
+          <div class="dropdown">
+            <button class="btn btn-link text-white p-0 dropdown-toggle" data-bs-toggle="dropdown">
+              <i class="fa-solid fa-user"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">প্রোফাইল</a></li>
+              <li><a class="dropdown-item" href="{% url 'orders:list' %}">আমার অর্ডার</a></li>
+              <li><a class="dropdown-item" href="{% url 'accounts:addresses' %}">ঠিকানা</a></li>
+              {% if user.is_staff %}<li><a class="dropdown-item" href="/admin/">অ্যাডমিন</a></li>{% endif %}
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <form method="post" action="{% url 'account_logout' %}">{% csrf_token %}
+                  <button class="dropdown-item" type="submit">লগআউট</button>
+                </form>
+              </li>
+            </ul>
+          </div>
+        {% else %}
+          <a href="{% url 'account_login' %}" class="btn btn-link text-white p-0" aria-label="লগইন">
+            <i class="fa-solid fa-right-to-bracket fs-5"></i>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</header>

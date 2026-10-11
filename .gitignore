@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Virtualenv / uv
+.venv/
+# uv manages these — but commit uv.lock, ignore nothing else uv-specific
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+/media/
+/staticfiles/
+
+# Env
+.env
+*.env
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

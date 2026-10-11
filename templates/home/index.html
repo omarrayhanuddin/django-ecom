@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load currency %}
+{% block title %}{{ site_settings.site_name|default:"ShopBazar" }} — অনলাইন শপ{% endblock %}
+
+{% block content %}
+
+{% if site_settings.announcement %}
+  <div class="announcement-bar py-2">
+    <span>{{ site_settings.announcement }}</span>
+  </div>
+{% endif %}
+
+{# ── HERO CAROUSEL ── #}
+{% if hero_banners %}
+<div id="heroCarousel" class="carousel slide container mt-3" data-bs-ride="carousel">
+  <div class="carousel-inner rounded">
+    {% for banner in hero_banners %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %} hero-slide">
+        <a href="{{ banner.link_url|default:'#' }}">
+          <img src="{{ banner.image.url }}" alt="{{ banner.title }}">
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+  {% if hero_banners|length > 1 %}
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span></button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span></button>
+  {% endif %}
+</div>
+{% endif %}
+
+{# ── FEATURED CATEGORIES ── #}
+{% if featured_categories %}
+<section class="container mt-4">
+  <div class="section-header"><h2 class="section-title">ফিচার্ড ক্যাটাগরি</h2></div>
+  <div class="row g-3">
+    {% for cat in featured_categories %}
+      <div class="col-6 col-md-3 col-lg-2">
+        <a href="{{ cat.get_absolute_url }}" class="category-chip">
+          <i class="{{ cat.icon|default:'fa-solid fa-tag' }} cat-icon"></i>
+          <span class="text-sm">{{ cat.display_name }}</span>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{# ── FLASH SALE ── #}
+{% if flash_sale and flash_entries %}
+<section class="container mt-4">
+  <div class="section-header">
+    <h2 class="section-title">⚡ ফ্ল্যাশ সেল</h2>
+    <a href="{% url 'promotions:flash_sale' %}" class="section-link">সব দেখুন →</a>
+  </div>
+  <div class="flash-sale-bar mb-3" x-data="countdown({{ flash_sale.time_remaining_seconds }})" x-init="start()">
+    <span>শেষ হবে</span>
+    <span class="flash-sale-timer" x-text="text">--:--:--</span>
+  </div>
+  <div class="row g-3">
+    {% for entry in flash_entries %}
+      <div class="col-6 col-md-4 col-lg-3">{% include 'partials/product_card.html' with product=entry.product %}</div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{# ── HOT DEALS ── #}
+{% if hot_deals %}
+<section class="container mt-5">
+  <div class="section-header">
+    <h2 class="section-title">🔥 হট ডিল</h2>
+    <a href="{% url 'promotions:hot_deals' %}" class="section-link">সব দেখুন →</a>
+  </div>
+  <div class="row g-3">
+    {% for hot in hot_deals %}
+      <div class="col-6 col-md-4 col-lg-3">{% include 'partials/product_card.html' with product=hot.product %}</div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{# ── TRENDING ── #}
+{% if trending %}
+<section class="container mt-5">
+  <div class="section-header"><h2 class="section-title">ট্রেন্ডিং পণ্য</h2></div>
+  <div class="row g-3">
+    {% for product in trending %}<div class="col-6 col-md-4 col-lg-3">{% include 'partials/product_card.html' with product=product %}</div>{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{# ── TOP RATED ── #}
+{% if top_rated %}
+<section class="container mt-5">
+  <div class="section-header"><h2 class="section-title">টপ রেটেড</h2></div>
+  <div class="row g-3">
+    {% for product in top_rated %}<div class="col-6 col-md-4 col-lg-3">{% include 'partials/product_card.html' with product=product %}</div>{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{# ── BEST SELLERS ── #}
+{% if best_sellers %}
+<section class="container mt-5">
+  <div class="section-header"><h2 class="section-title">বেস্ট সেলার</h2></div>
+  <div class="row g-3">
+    {% for product in best_sellers %}<div class="col-6 col-md-4 col-lg-3">{% include 'partials/product_card.html' with product=product %}</div>{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{# ── RECOMMENDED ── #}
+{% if recommended %}
+<section class="container mt-5">
+  <div class="section-header"><h2 class="section-title">আপনার জন্য সুপারিশ</h2></div>
+  <div class="row g-3">
+    {% for product in recommended %}<div class="col-6 col-md-4 col-lg-3">{% include 'partials/product_card.html' with product=product %}</div>{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{# ── FEATURED PRODUCTS ── #}
+{% if featured_products %}
+<section class="container mt-5">
+  <div class="section-header">
+    <h2 class="section-title">নির্বাচিত পণ্য</h2>
+    <a href="{% url 'catalogue:product_list' %}" class="section-link">সব পণ্য →</a>
+  </div>
+  <div class="row g-3">
+    {% for product in featured_products %}<div class="col-6 col-md-4 col-lg-3">{% include 'partials/product_card.html' with product=product %}</div>{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{# ── VISITOR COUNTER ── #}
+<section class="container mt-5">
+  <div class="visitor-bar rounded">
+    <span><span class="visitor-label">মোট ভিজিটর:</span> <span class="visitor-count">{{ total_visits }}</span></span>
+    <span><span class="live-dot me-1"></span><span class="visitor-label">এখন অনলাইন:</span>
+      <span class="visitor-count" data-live-count
+            hx-get="{% url 'analytics:live_count' %}" hx-trigger="every 30s" hx-swap="innerHTML">{{ live_count }}</span>
+    </span>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function countdown(seconds) {
+    return {
+      text: '--:--:--',
+      start() {
+        let s = seconds;
+        const tick = () => {
+          if (s <= 0) { this.text = 'শেষ'; return; }
+          const h = String(Math.floor(s / 3600)).padStart(2, '0');
+          const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+          const sec = String(s % 60).padStart(2, '0');
+          this.text = `${h}:${m}:${sec}`;
+          s -= 1;
+          setTimeout(tick, 1000);
+        };
+        tick();
+      }
+    };
+  }
+</script>
+{% endblock %}
