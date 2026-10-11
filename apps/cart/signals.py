@@ -7,4 +7,4 @@ from .services import merge_carts
 @receiver(user_logged_in)
 def merge_cart_on_login(sender, request, user, **kwargs):
     if request is not None:
-        merge_carts(request)
+        merge_carts(request, user=user)
