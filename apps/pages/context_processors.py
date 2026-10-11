@@ -1,4 +1,5 @@
-"""Expose SiteSettings / SupportInfo to all templates."""
+"""Expose SiteSettings / SupportInfo / feature flags to all templates."""
+from django.conf import settings
 
 
 def site_settings(request):
@@ -11,3 +12,7 @@ def site_settings(request):
         }
     except Exception:
         return {"site_settings": None, "support_info": None}
+
+
+def features(request):
+    return {"enable_websocket": getattr(settings, "ENABLE_WEBSOCKET", True)}

@@ -98,6 +98,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "apps.pages.context_processors.site_settings",
+                "apps.pages.context_processors.features",
                 "apps.cart.context_processors.cart_summary",
                 "apps.promotions.context_processors.active_promotions",
                 "apps.accounts.context_processors.social_providers",

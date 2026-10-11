@@ -10,9 +10,10 @@ __pycache__/
 # uv manages these — but commit uv.lock, ignore nothing else uv-specific
 
 # Django
-db.sqlite3
+# NOTE (deploy/render-client-demo): db.sqlite3 and /media/ are intentionally
+# committed on this branch so the demo deploys with data + images and needs no
+# extra setup. Do NOT merge this .gitignore change back to master.
 db.sqlite3-journal
-/media/
 /staticfiles/
 
 # Env

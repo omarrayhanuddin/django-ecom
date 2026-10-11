@@ -1,5 +1,6 @@
 /* Live visitor count over WebSocket, with graceful fallback. */
 (function () {
+  if (window.SHOPBAZAR_ENABLE_WS === false) return;
   var nodes = function () { return document.querySelectorAll('[data-live-count]'); };
   if (!nodes().length) return;
 

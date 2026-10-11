@@ -1,0 +1,27 @@
+# Render Blueprint for the client demo branch.
+# Deploys a single free web service: SQLite (committed with demo data) + media
+# served by Django. No Postgres/Redis required.
+services:
+  - type: web
+    name: shopbazar-demo
+    runtime: python
+    plan: free
+    branch: deploy/render-client-demo
+    autoDeploy: true
+    buildCommand: >-
+      pip install --upgrade pip &&
+      pip install -r requirements.txt &&
+      python manage.py collectstatic --noinput &&
+      python manage.py migrate --noinput
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.12
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.render
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "*"
