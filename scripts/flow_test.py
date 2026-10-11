@@ -1,4 +1,4 @@
-"""End-to-end flow test: cart -> coupon -> checkout -> payment -> next-purchase coupon."""
+"""End-to-end flow test: auth-gated checkout -> coupon -> payment -> next-purchase coupon."""
 import os
 import sys
 import uuid
@@ -35,12 +35,24 @@ product = Product.objects.filter(base_price__gte=Decimal("500")).first()
 store = StoreLocation.objects.first()
 settings_obj = SiteSettings.load()
 
-# Fresh guest cart
+# ── Anonymous user cannot check out ──
 client.get("/cart/")
+client.post("/cart/add/", {"product_id": product.id, "quantity": 1})
+resp = client.get("/checkout/")
+check("anonymous /checkout/ redirects to login", resp.status_code == 302 and "/accounts/login/" in resp.headers.get("Location", ""))
+
+# ── Log in ──
+user, _ = User.objects.get_or_create(
+    email="flowtest@example.com",
+    defaults={"full_name": "Flow Test", "phone_number": "01712345678", "onboarding_complete": True},
+)
+client.force_login(user)
+
+# ── Build a cart as the user ──
 client.post("/cart/add/", {"product_id": product.id, "quantity": 1})
 client.post("/cart/apply-coupon/", {"code": "welcome10"})
 
-cart = Cart.objects.filter(session_key=client.session.session_key).first()
+cart = Cart.objects.filter(user=user).first()
 subtotal = cart.subtotal
 discount = cart.discount_amount
 fee = cart.platform_fee_amount
@@ -55,12 +67,13 @@ check("coupon discount = 10% of subtotal", discount == expected_discount)
 check("platform fee on post-discount taxable", fee == expected_fee)
 check("total = taxable + fee", total == expected_total)
 
-# Checkout
+check("authenticated /checkout/ loads", client.get("/checkout/").status_code == 200)
+
 resp = client.post(
     "/checkout/",
     {
-        "customer_name": "Test Guest",
-        "email": "guest@example.com",
+        "customer_name": "Flow Test",
+        "email": user.email,
         "phone": "01712345678",
         "pickup_store": store.id,
         "payment_method": "BKASH",
@@ -71,16 +84,14 @@ resp = client.post(
 )
 check("checkout redirects (order created)", resp.status_code == 302)
 
-order = Order.objects.filter(guest_email="guest@example.com").order_by("-id").first()
-check("order exists", order is not None)
+order = Order.objects.filter(user=user).order_by("-id").first()
+check("order exists and belongs to the user", order is not None and order.user_id == user.id)
 if order:
     check("order subtotal snapshot", order.subtotal == subtotal)
     check("order fee snapshot", order.platform_fee_amount == expected_fee)
     check("order total snapshot", order.total_amount == expected_total)
     check("order awaiting verification", order.payment_status == "AWAITING_VERIFICATION")
-    check("guest can track by public token", client.get(f"/orders/track/{order.public_token}/").status_code == 200)
 
-    # Mark paid via model (admin action equivalent) -> coupon issued
     order.mark_paid()
     order.refresh_from_db()
     check("payment marked paid", order.payment_status == "PAID")
@@ -89,9 +100,8 @@ if order:
     if next_coupon:
         check("next coupon is 5%", next_coupon.discount_value == Decimal("5.00"))
 
-# Guest cannot view order detail by number (must be owner)
-if order:
-    check("guest blocked from /orders/<number>/", client.get(f"/orders/{order.order_number}/").status_code == 302)
+    check("owner can view order detail", client.get(f"/orders/{order.order_number}/").status_code == 200)
+    check("track by public token works", client.get(f"/orders/track/{order.public_token}/").status_code == 200)
 
 print("\nFAILURES:", len(failures))
 for f in failures:

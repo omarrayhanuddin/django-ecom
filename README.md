@@ -142,10 +142,11 @@ carousel. A Celery beat task deactivates expired flash sales every 5 minutes.
 (max-quantity collision policy), HTMX add / update / remove, slide-in drawer,
 coupon application (rate-limit ready).
 
-**Orders** — guest + authenticated checkout, **no delivery address** (pickup
-notice + store selection), manual payment with reference number, an admin action
-to mark paid (which emails the customer and issues the next-purchase coupon),
-order history, ownership checks, and public token-based tracking for guests.
+**Orders** — **login is required to check out** (guests are redirected to login
+and returned to checkout). No delivery address (pickup notice + store
+selection), manual payment with reference number, an admin action to mark paid
+(which emails the customer and issues the next-purchase coupon), order history,
+ownership checks, and public token-based tracking links.
 
 **Analytics** — one `SiteVisit` row per session, a total visitor counter, and a
 live visitor count over WebSocket (CORS-free, multi-tab correct via a Redis ref

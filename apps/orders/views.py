@@ -11,9 +11,12 @@ from .forms import CheckoutForm
 from .services import create_order_from_cart
 
 
-class CheckoutView(FormView):
+class CheckoutView(LoginRequiredMixin, FormView):
+    """Checkout requires an authenticated user (guests are sent to login)."""
+
     template_name = "orders/checkout.html"
     form_class = CheckoutForm
+    login_url = "/accounts/login/"
 
     def dispatch(self, request, *args, **kwargs):
         self.cart = get_cart(request, create=False)

@@ -135,3 +135,25 @@ def test_payment_reference_is_unique(product):
             },
             None,
         )
+
+
+def test_checkout_requires_login(client, product):
+    """Anonymous users hitting /checkout/ are sent to login."""
+    session = client.session
+    session.save()
+    cart = Cart.objects.create(session_key=session.session_key)
+    add_item(cart, product, None, 1)
+    resp = client.get("/checkout/")
+    assert resp.status_code == 302
+    assert "/accounts/login/" in resp["Location"]
+
+
+def test_checkout_accessible_when_logged_in(client, product, django_user_model):
+    user = django_user_model.objects.create_user(
+        email="buyer@example.com", password="pw12345678",
+        full_name="Buyer", phone_number="01712345678", onboarding_complete=True,
+    )
+    client.force_login(user)
+    cart = Cart.objects.create(user=user)
+    add_item(cart, product, None, 1)
+    assert client.get("/checkout/").status_code == 200

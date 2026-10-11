@@ -77,15 +77,16 @@ def clear_cart(cart):
     cart.save(update_fields=["coupon"])
 
 
-def merge_carts(request):
+def merge_carts(request, user=None):
     """Merge a guest session cart into the user's cart on login.
 
     Collision policy: keep the larger quantity (clamped), never sum duplicates.
     """
-    user = request.user
-    if not user.is_authenticated:
+    user = user or getattr(request, "user", None)
+    if not user or not user.is_authenticated:
         return None
-    session_key = request.session.session_key
+    session = getattr(request, "session", None)
+    session_key = session.session_key if session is not None else None
     if not session_key:
         return None
     guest_cart = Cart.objects.filter(session_key=session_key).first()
